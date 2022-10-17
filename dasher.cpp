@@ -8,16 +8,21 @@ void startDasher(){
     // init window
     InitWindow(windowDimensions[0], windowDimensions[1], "Dasher");
 
-    //player dimensions
-    const int width{50};
-    const int height{80};
-
     //physics 
     const int gravity {1'000};
     const int jumpVel {-600};
     int velocity = 0;
 
-    int posY{windowDimensions[1] - height};
+    Texture2D scarfy = LoadTexture("textures/scarfy.png");
+    Rectangle scarfyRec;
+    scarfyRec.width = scarfy.width/6;
+    scarfyRec.height = scarfy.height;
+    scarfyRec.x = 0;
+    scarfyRec.y = 0;
+
+    Vector2 scarfyPos;
+    scarfyPos.x = windowDimensions[0]/2 - scarfyRec.width/2;
+    scarfyPos.y = windowDimensions[1] - scarfyRec.height;
 
     // prevent double jumping
     bool isInAir{};
@@ -35,7 +40,7 @@ void startDasher(){
         ClearBackground(WHITE);
 
         // player on ground
-        if(posY >= windowDimensions[1] - height){
+        if(scarfyPos.y >= windowDimensions[1] - scarfyRec.height){
            velocity = 0;
            isInAir = false; 
         }
@@ -52,12 +57,13 @@ void startDasher(){
         }
 
         // update position (/frame)
-        posY += velocity * dT;
+        scarfyPos.y += velocity;
 
-        DrawRectangle(windowDimensions[0]/2 - width/2, posY, width, height, BLUE);
+        DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         // end drawing
         EndDrawing();
     }
+    UnloadTexture(scarfy);
 
     CloseWindow();
 }
