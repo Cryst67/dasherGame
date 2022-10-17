@@ -24,6 +24,13 @@ void startDasher(){
     scarfyPos.x = windowDimensions[0]/2 - scarfyRec.width/2;
     scarfyPos.y = windowDimensions[1] - scarfyRec.height;
 
+    //animation frame
+    int frame{};
+
+    // amount of time before animation frame update
+    const float updateTime{1.0/12.0};
+    float runningTime{};
+
     // prevent double jumping
     bool isInAir{};
 
@@ -57,8 +64,20 @@ void startDasher(){
         }
 
         // update position (/frame)
-        scarfyPos.y += velocity;
-
+        scarfyPos.y += velocity * dT;
+        // update running time
+        runningTime += dT;
+        if (runningTime >= updateTime)
+        {
+            runningTime = 0.0;
+            // update animation frame
+            scarfyRec.x = frame * scarfyRec.width;
+            frame++;
+            if (frame > 5)
+            {
+                frame = 0;
+            }
+        }
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         // end drawing
         EndDrawing();
