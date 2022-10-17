@@ -3,7 +3,7 @@
 
 void startDasher(){
     // window dimensions
-    const int windowDimensions[]{512, 288};
+    const int windowDimensions[]{512, 380};
 
     // init window
     InitWindow(windowDimensions[0], windowDimensions[1], "Dasher");
@@ -13,7 +13,8 @@ void startDasher(){
     const int height{80};
 
     //physics 
-    const int gravity {1};
+    const int gravity {1'000};
+    const int jumpVel {-600};
     int velocity = 0;
 
     int posY{windowDimensions[1] - height};
@@ -25,6 +26,9 @@ void startDasher(){
     SetTargetFPS(60);
 
     while(!WindowShouldClose()){
+        
+        // delta time
+        const float dT{GetFrameTime()};
 
         // begin drawing
         BeginDrawing();
@@ -38,17 +42,17 @@ void startDasher(){
 
         // player in air
         else{
-            velocity += gravity;    
+            velocity += gravity * dT;    
             isInAir = true;
         }                  
 
         // jump mechanic
         if(IsKeyPressed(KEY_SPACE) && !isInAir){
-            velocity -= 10;                                     
+            velocity += jumpVel;                                     
         }
 
         // update position (/frame)
-        posY += velocity;
+        posY += velocity * dT;
 
         DrawRectangle(windowDimensions[0]/2 - width/2, posY, width, height, BLUE);
         // end drawing
