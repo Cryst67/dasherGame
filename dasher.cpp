@@ -13,6 +13,15 @@ void startDasher(){
     const int jumpVel {-600};
     int velocity = 0;
 
+     // hazard variables
+    Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
+    Rectangle nebRec{0.0, 0.0, nebula.width/8, nebula.height/8};
+    Vector2 nebPos{windowDimensions[0], windowDimensions[1] - nebRec.height};
+
+    // nebula X velocity (pixels/second)
+    int nebVel{-600};
+
+    // player variables
     Texture2D scarfy = LoadTexture("textures/scarfy.png");
     Rectangle scarfyRec;
     scarfyRec.width = scarfy.width/6;
@@ -62,27 +71,35 @@ void startDasher(){
         if(IsKeyPressed(KEY_SPACE) && !isInAir){
             velocity += jumpVel;                                     
         }
+        
+        // update hazard position
+         nebPos.x += nebVel * dT;
 
-        // update position (/frame)
+        // update player position
         scarfyPos.y += velocity * dT;
-        // update running time
-        runningTime += dT;
-        if (runningTime >= updateTime)
-        {
-            runningTime = 0.0;
-            // update animation frame
-            scarfyRec.x = frame * scarfyRec.width;
-            frame++;
-            if (frame > 5)
+
+        if(!isInAir){
+            runningTime += dT;
+            if (runningTime >= updateTime)
             {
-                frame = 0;
+                runningTime = 0.0;
+                // update animation frame
+                scarfyRec.x = frame * scarfyRec.width;
+                frame++;
+                if (frame > 5)
+                {
+                    frame = 0;
+                }
             }
         }
+        
+        DrawTextureRec(nebula, nebRec, nebPos, WHITE);
         DrawTextureRec(scarfy, scarfyRec, scarfyPos, WHITE);
         // end drawing
         EndDrawing();
     }
     UnloadTexture(scarfy);
+    UnloadTexture(nebula);
 
     CloseWindow();
 }
