@@ -15,8 +15,8 @@ void startDasher(){
 
      // hazard variables
     Texture2D nebula = LoadTexture("textures/12_nebula_spritesheet.png");
-    Rectangle nebRec{0.0, 0.0, nebula.width/8, nebula.height/8};
-    Vector2 nebPos{windowDimensions[0], windowDimensions[1] - nebRec.height};
+    Rectangle nebRec{0.0, 0.0, nebula.width/8.0f, nebula.height/8.0f};
+    Vector2 nebPos{(float)windowDimensions[0], windowDimensions[1] - nebRec.height};
 
     // nebula X velocity (pixels/second)
     int nebVel{-600};
